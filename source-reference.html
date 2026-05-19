@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>S A W Brand Builder — Transforming brand ideas into refined product experiences.</title>
+<meta name="description" content="S A W is a Brand Builder that transforms brand ideas into refined product experiences. Structuring every stage from concept to production — so brands can execute with clarity and grow with confidence." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet" />
+<style>
+  /* --------------------------------------------------------------------
+     Design Tokens
+     -------------------------------------------------------------------- */
+  :root {
+    --black: #0a0a0a;
+    --white: #ffffff;
+    --off-white: #f8f7f5;
+    --gray-100: #f2f2f2;
+    --gray-200: #e5e5e5;
+    --gray-300: #c9c9c9;
+    --gray-500: #8a8a8a;
+    --gray-700: #4a4a4a;
+    --gray-900: #2b2b2b;
+
+    --font-sans: 'Inter', 'Pretendard', -apple-system, BlinkMacSystemFont,
+                 'Apple SD Gothic Neo', 'Malgun Gothic', 'Helvetica Neue', Arial, sans-serif;
+    --font-display: 'Inter', 'Pretendard', -apple-system, 'Helvetica Neue', Arial, sans-serif;
+
+    --max-w: 1280px;
+    --gutter-x: clamp(24px, 5vw, 80px);
+    --section-y: clamp(80px, 12vw, 160px);
+
+    --tight: -0.02em;
+    --tighter: -0.035em;
+
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    color: var(--black);
+    background: var(--white);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  img, svg { display: block; max-width: 100%; }
+  a { color: inherit; text-decoration: none; }
+  button { border: none; background: none; font: inherit; color: inherit; cursor: pointer; }
+
+  ::selection { background: var(--black); color: var(--white); }
+
+  /* --------------------------------------------------------------------
+     Utility
+     -------------------------------------------------------------------- */
+  .container {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding-left: var(--gutter-x);
+    padding-right: var(--gutter-x);
+  }
+
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gray-500);
+  }
+
+  .eyebrow--light { color: var(--gray-300); }
+
+  .display {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: var(--tighter);
+    line-height: 1.05;
+  }
+
+  .kr-sub {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    color: var(--gray-700);
+    line-height: 1.6;
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--gray-200);
+    width: 100%;
+  }
+
+  .divider--dark { background: #2c2c2c; }
+
+  /* --------------------------------------------------------------------
+     Logo
+     -------------------------------------------------------------------- */
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+  }
+  .logo__img {
+    height: 40px;
+    width: auto;
+    display: block;
+  }
+  @media (max-width: 720px) {
+    .logo__img { height: 34px; }
+  }
+  /* Hero nav is dark → show LIGHT logo (white ink). Hide dark logo. */
+  .logo__img--dark { display: none; }
+  .logo__img--light { display: block; }
+  /* When scrolled past hero, nav turns light → show DARK logo. */
+  .nav.is-scrolled .logo__img--light { display: none; }
+  .nav.is-scrolled .logo__img--dark { display: block; }
+
+  /* --------------------------------------------------------------------
+     Nav
+     -------------------------------------------------------------------- */
+  .nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 50;
+    padding: 20px 0;
+    transition: background 0.35s var(--ease),
+                border-color 0.35s var(--ease),
+                padding 0.35s var(--ease);
+    border-bottom: 1px solid transparent;
+  }
+  .nav.is-dark { color: var(--white); }
+  .nav.is-scrolled {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: saturate(180%) blur(14px);
+    -webkit-backdrop-filter: saturate(180%) blur(14px);
+    color: var(--black);
+    border-bottom-color: var(--gray-200);
+    padding: 14px 0;
+  }
+  .nav__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav__menu {
+    display: flex; gap: 36px; align-items: center;
+  }
+  .nav__link {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.75;
+    transition: opacity 0.2s var(--ease);
+  }
+  .nav__link:hover { opacity: 1; }
+  .nav__cta {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    transition: background 0.25s var(--ease), color 0.25s var(--ease);
+  }
+  .nav.is-dark .nav__cta:hover {
+    background: var(--white); color: var(--black);
+  }
+  .nav.is-scrolled .nav__cta:hover {
+    background: var(--black); color: var(--white);
+  }
+  @media (max-width: 720px) {
+    .nav__menu { display: none; }
+  }
+
+  /* --------------------------------------------------------------------
+     Hero
+     -------------------------------------------------------------------- */
+  .hero {
+    min-height: 100vh;
+    min-height: 100dvh;
+    background: var(--black);
+    color: var(--white);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding: 120px 0 60px;
+  }
+  .hero__main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px 0;
+  }
+  .hero__eyebrow {
+    display: flex;
+    gap: 14px;
+    align-items: baseline;
+    margin-bottom: 32px;
+    color: var(--gray-500);
+  }
+  .hero__eyebrow span { color: var(--gray-300); }
+  .hero__eyebrow-sep { color: var(--gray-700); }
+  .hero__headline {
+    font-size: clamp(44px, 7.2vw, 100px);
+    color: var(--white);
+  }
+  .hero__kr-headline {
+    font-size: clamp(20px, 2.2vw, 30px);
+    font-weight: 500;
+    color: var(--gray-100);
+    margin-top: 22px;
+    letter-spacing: -0.01em;
+    line-height: 1.35;
+  }
+  .hero__rule {
+    width: 48px;
+    height: 1px;
+    background: var(--gray-700);
+    margin: 36px 0 28px;
+  }
+  .hero__subcopy {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    max-width: 720px;
+  }
+  .hero__subcopy p {
+    font-size: clamp(13.5px, 1.1vw, 15px);
+    line-height: 1.7;
+    margin: 0;
+  }
+  .hero__subcopy-en {
+    color: var(--gray-200);
+  }
+  .hero__subcopy-kr {
+    color: var(--gray-500);
+  }
+  .hero__bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 40px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gray-300);
+  }
+  .hero__scroll {
+    display: inline-flex; align-items: center; gap: 10px;
+    color: var(--gray-300);
+    cursor: pointer;
+    transition: color 0.25s var(--ease);
+  }
+  .hero__scroll:hover { color: var(--white); }
+  .hero__scroll svg {
+    animation: scrollDot 2.2s var(--ease) infinite;
+  }
+  @keyframes scrollDot {
+    0%, 100% { transform: translateY(0); opacity: 0.6; }
+    50% { transform: translateY(6px); opacity: 1; }
+  }
+
+  /* --------------------------------------------------------------------
+     Section
+     -------------------------------------------------------------------- */
+  .section {
+    padding: var(--section-y) 0;
+  }
+  .section--dark {
+    background: var(--black);
+    color: var(--white);
+  }
+  .section--soft {
+    background: var(--off-white);
+  }
+  .section__head {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    margin-bottom: clamp(56px, 7vw, 96px);
+    max-width: 960px;
+  }
+  .section__num {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    color: var(--gray-500);
+  }
+  .section--dark .section__num { color: var(--gray-300); }
+  .section__title {
+    font-size: clamp(36px, 5.5vw, 72px);
+    letter-spacing: var(--tighter);
+    line-height: 1.05;
+    font-weight: 400;
+  }
+  .section__title span {
+    display: block;
+    color: var(--gray-500);
+    font-size: 0.55em;
+    margin-top: 10px;
+    letter-spacing: -0.01em;
+  }
+  .section--dark .section__title span { color: var(--gray-300); }
+  .section__lead {
+    font-size: clamp(16px, 1.5vw, 19px);
+    color: var(--gray-700);
+    font-style: italic;
+    max-width: 46em;
+    line-height: 1.6;
+    margin-top: 16px;
+  }
+  .section--dark .section__lead { color: var(--gray-300); }
+
+  /* --------------------------------------------------------------------
+     Philosophy
+     -------------------------------------------------------------------- */
+  .philosophy {
+    background: var(--off-white);
+  }
+  .philosophy__grid {
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr;
+    gap: clamp(40px, 5vw, 80px);
+    align-items: start;
+  }
+  .philosophy__rule {
+    background: var(--gray-200);
+    align-self: stretch;
+  }
+  .philosophy__col {
+    font-size: clamp(15px, 1.35vw, 18px);
+    line-height: 1.7;
+    color: var(--gray-900);
+  }
+  .philosophy__col p { margin-bottom: 1.4em; }
+  .philosophy__col .eyebrow { margin-bottom: 20px; }
+  .philosophy__col--en p { font-style: italic; }
+  @media (max-width: 900px) {
+    .philosophy__grid {
+      grid-template-columns: 1fr;
+      gap: 48px;
+    }
+    .philosophy__rule { display: none; }
+  }
+
+  /* --------------------------------------------------------------------
+     Core Values
+     -------------------------------------------------------------------- */
+  .values {
+    background: var(--white);
+  }
+  .values__grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--gray-200);
+  }
+  .values__item {
+    padding: 40px 28px;
+    border-right: 1px solid var(--gray-200);
+    border-bottom: 1px solid var(--gray-200);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    position: relative;
+    transition: background 0.3s var(--ease);
+  }
+  .values__item:last-child { border-right: none; }
+  .values__item:hover { background: var(--off-white); }
+  .values__num {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    color: var(--gray-500);
+  }
+  .values__name-en {
+    font-size: clamp(22px, 2vw, 28px);
+    letter-spacing: var(--tight);
+    font-weight: 500;
+    line-height: 1.1;
+  }
+  .values__name-kr {
+    font-size: 13px;
+    color: var(--gray-500);
+    letter-spacing: 0.05em;
+    margin-top: -8px;
+  }
+  .values__tag {
+    font-size: 12px;
+    color: var(--gray-700);
+    font-style: italic;
+    line-height: 1.5;
+    margin-top: 8px;
+  }
+  .values__desc {
+    font-size: 11.5px;
+    color: var(--gray-700);
+    line-height: 1.6;
+    margin-top: 16px;
+  }
+  @media (max-width: 900px) {
+    .values__grid {
+      grid-template-columns: 1fr;
+    }
+    .values__item {
+      border-right: none;
+      padding: 32px 0;
+    }
+  }
+
+  /* --------------------------------------------------------------------
+     Services (two pillars)
+     -------------------------------------------------------------------- */
+  .services {
+    background: var(--white);
+  }
+  .services__pillars {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 40px;
+  }
+  .pillar {
+    padding: clamp(36px, 4vw, 56px);
+    position: relative;
+    border-top: 2px solid;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-height: 440px;
+    transition: transform 0.4s var(--ease);
+  }
+  .pillar:hover { transform: translateY(-4px); }
+  .pillar--light {
+    background: var(--off-white);
+    border-top-color: var(--black);
+    color: var(--black);
+  }
+  .pillar--dark {
+    background: var(--black);
+    border-top-color: var(--white);
+    color: var(--white);
+  }
+  .pillar__num {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    color: var(--gray-500);
+  }
+  .pillar--dark .pillar__num { color: var(--gray-300); }
+  .pillar__title {
+    font-size: clamp(32px, 3.6vw, 48px);
+    letter-spacing: var(--tighter);
+    line-height: 1.05;
+    font-weight: 400;
+  }
+  .pillar__title span {
+    display: block;
+    font-size: 0.45em;
+    color: var(--gray-500);
+    margin-top: 10px;
+  }
+  .pillar--dark .pillar__title span { color: var(--gray-300); }
+  .pillar__desc {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--gray-700);
+    margin-bottom: 12px;
+  }
+  .pillar--dark .pillar__desc { color: var(--gray-200); }
+  .pillar__list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: auto;
+    padding-top: 24px;
+    border-top: 1px solid rgba(0,0,0,0.1);
+  }
+  .pillar--dark .pillar__list {
+    border-top-color: rgba(255,255,255,0.15);
+  }
+  .pillar__list li {
+    display: grid;
+    grid-template-columns: 32px 1fr auto;
+    gap: 16px;
+    align-items: baseline;
+    font-size: 13px;
+  }
+  .pillar__list .n {
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--gray-500);
+  }
+  .pillar--dark .pillar__list .n { color: var(--gray-300); }
+  .pillar__list .en { font-weight: 500; }
+  .pillar__list .kr {
+    font-size: 11px;
+    color: var(--gray-500);
+  }
+  .pillar--dark .pillar__list .kr { color: var(--gray-300); }
+  @media (max-width: 800px) {
+    .services__pillars { grid-template-columns: 1fr; }
+    .pillar { min-height: auto; }
+  }
+
+  /* --------------------------------------------------------------------
+     Process
+     -------------------------------------------------------------------- */
+  .process {
+    background: var(--off-white);
+  }
+  .process__grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--gray-200);
+  }
+  .process__step {
+    padding: 32px 24px;
+    border-right: 1px solid var(--gray-200);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 220px;
+    position: relative;
+  }
+  .process__step:last-child { border-right: none; }
+  .process__step::before {
+    content: '';
+    position: absolute;
+    top: -1px; left: 0;
+    width: 30%;
+    height: 2px;
+    background: var(--black);
+  }
+  .process__n {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    color: var(--gray-500);
+  }
+  .process__name {
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: var(--tight);
+    line-height: 1.1;
+  }
+  .process__name span {
+    display: block;
+    font-size: 13px;
+    color: var(--gray-500);
+    margin-top: 4px;
+    letter-spacing: 0.02em;
+  }
+  .process__desc {
+    font-size: 12px;
+    color: var(--gray-700);
+    line-height: 1.55;
+    margin-top: auto;
+  }
+  @media (max-width: 900px) {
+    .process__grid { grid-template-columns: 1fr; }
+    .process__step {
+      border-right: none;
+      border-bottom: 1px solid var(--gray-200);
+      min-height: auto;
+    }
+  }
+
+  /* --------------------------------------------------------------------
+     Portfolio (v2 — card grid: image + logo only)
+     -------------------------------------------------------------------- */
+  .portfolio {
+    background: var(--white);
+  }
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(16px, 2vw, 28px);
+  }
+  @media (max-width: 960px) {
+    .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 600px) {
+    .cards { grid-template-columns: 1fr; }
+  }
+  .card {
+    position: relative;
+    display: block;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: var(--gray-100);
+    color: inherit;
+    text-decoration: none;
+    isolation: isolate;
+    transition: transform 0.5s var(--ease);
+  }
+  .card:hover { transform: translateY(-4px); }
+
+  /* image layer */
+  .card__image {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.8s var(--ease), filter 0.5s var(--ease);
+    filter: grayscale(100%) brightness(0.85);
+  }
+  .card:hover .card__image {
+    transform: scale(1.04);
+    filter: grayscale(100%) brightness(0.92);
+  }
+
+  /* overlay to keep logo legible */
+  .card__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg,
+                                rgba(0,0,0,0.05) 0%,
+                                rgba(0,0,0,0.15) 50%,
+                                rgba(0,0,0,0.55) 100%);
+    transition: background 0.4s var(--ease);
+  }
+  .card:hover .card__overlay {
+    background: linear-gradient(180deg,
+                                rgba(0,0,0,0.15) 0%,
+                                rgba(0,0,0,0.30) 50%,
+                                rgba(0,0,0,0.65) 100%);
+  }
+
+  /* index — subtle top-left marker */
+  .card__index {
+    position: absolute;
+    top: 18px; left: 20px;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    color: rgba(255,255,255,0.85);
+    z-index: 2;
+  }
+
+  /* logo block — centered bottom area */
+  .card__logo {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    padding: 24px 22px 26px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    min-height: 44%;
+    z-index: 2;
+  }
+  .card__logo-mark {
+    font-family: var(--font-display);
+    font-size: clamp(24px, 2.6vw, 36px);
+    font-weight: 500;
+    letter-spacing: var(--tight);
+    color: var(--white);
+    text-align: center;
+    line-height: 1.1;
+  }
+  .card__logo img {
+    max-width: 62%;
+    max-height: 56px;
+    width: auto;
+    height: auto;
+    filter: brightness(0) invert(1); /* force white for any logo */
+  }
+  /* per-card logo size modifier (e.g., for tall icon+wordmark logos) */
+  .card--logo-lg .card__logo {
+    padding-bottom: 5px;     /* ~25px lower than default */
+  }
+  .card--logo-lg .card__logo img {
+    max-width: 90%;
+    max-height: 110px;
+  }
+
+  /* placeholder canvases (monochrome gradients so cards look finished before real images) */
+  /* ---- light-card variant (for brand images shot on white) ---- */
+  .card--light .card__image {
+    filter: none;
+  }
+  .card--light:hover .card__image {
+    filter: none;
+  }
+  .card--light .card__overlay {
+    background: linear-gradient(180deg,
+                                rgba(255,255,255,0) 0%,
+                                rgba(255,255,255,0) 55%,
+                                rgba(255,255,255,0.85) 100%);
+  }
+  .card--light:hover .card__overlay {
+    background: linear-gradient(180deg,
+                                rgba(255,255,255,0) 0%,
+                                rgba(255,255,255,0.10) 50%,
+                                rgba(255,255,255,0.92) 100%);
+  }
+  .card--light .card__index {
+    color: var(--gray-700);
+  }
+  .card--light .card__logo img {
+    filter: none;           /* preserve brand logo color */
+  }
+  .card--light .card__logo-mark {
+    color: var(--black);
+  }
+  .card--light {
+    background: #f5f5f3;
+    box-shadow: inset 0 0 0 1px var(--gray-200);
+  }
+
+  .card__image--ph-a {
+    background:
+      radial-gradient(circle at 30% 30%, #3a3a3a 0%, #1a1a1a 60%, #0d0d0d 100%);
+  }
+  /* light placeholder for cards awaiting a studio-white image */
+  .card__image--ph-light {
+    background:
+      linear-gradient(180deg, #fafaf8 0%, #ececea 100%);
+  }
+  .card__image--ph-b {
+    background:
+      linear-gradient(135deg, #2a2a2a 0%, #1c1c1c 50%, #0f0f0f 100%);
+  }
+  .card__image--ph-c {
+    background:
+      radial-gradient(ellipse at 70% 70%, #2f2f2f 0%, #171717 55%, #0b0b0b 100%);
+  }
+  .card__image--ph-d {
+    background:
+      linear-gradient(200deg, #323232 0%, #1d1d1d 55%, #0e0e0e 100%);
+  }
+  .card__image--ph-e {
+    background:
+      radial-gradient(circle at 50% 20%, #353535 0%, #1a1a1a 60%, #0b0b0b 100%);
+  }
+  .card__image--ph-f {
+    background:
+      linear-gradient(160deg, #2d2d2d 0%, #1a1a1a 60%, #101010 100%);
+  }
+
+  /* --------------------------------------------------------------------
+     Contact
+     -------------------------------------------------------------------- */
+  .contact {
+    background: var(--black);
+    color: var(--white);
+    padding: var(--section-y) 0;
+  }
+  .contact__headline {
+    font-size: clamp(44px, 6.2vw, 88px);
+    letter-spacing: var(--tighter);
+    line-height: 1.05;
+    font-weight: 400;
+    max-width: 14em;
+  }
+  .contact__kr {
+    font-size: clamp(15px, 1.4vw, 18px);
+    color: var(--gray-300);
+    margin-top: 32px;
+    font-style: italic;
+    max-width: 46em;
+  }
+  .contact__body {
+    margin-top: clamp(56px, 7vw, 96px);
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: clamp(40px, 6vw, 96px);
+    align-items: start;
+  }
+  .contact__info {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+  .contact__info-item .eyebrow { color: var(--gray-500); }
+  .contact__info-item-val {
+    font-size: 18px;
+    margin-top: 8px;
+    letter-spacing: -0.01em;
+  }
+  .contact__info-item-val a {
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.25s var(--ease);
+  }
+  .contact__info-item-val a:hover {
+    border-bottom-color: var(--white);
+  }
+  .contact__form {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px 0;
+    border-bottom: 1px solid #2c2c2c;
+  }
+  .field label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gray-500);
+  }
+  .field input, .field textarea, .field select {
+    background: transparent;
+    border: none;
+    color: var(--white);
+    font: inherit;
+    font-size: 16px;
+    padding: 4px 0;
+    outline: none;
+    font-family: var(--font-sans);
+    resize: none;
+  }
+  .field input::placeholder,
+  .field textarea::placeholder {
+    color: #4a4a4a;
+  }
+  .field textarea { min-height: 80px; }
+  .contact__submit {
+    align-self: flex-start;
+    margin-top: 32px;
+    padding: 18px 36px;
+    border: 1px solid var(--white);
+    border-radius: 999px;
+    color: var(--white);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    transition: background 0.25s var(--ease), color 0.25s var(--ease);
+    cursor: pointer;
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  .contact__submit:hover {
+    background: var(--white);
+    color: var(--black);
+  }
+  @media (max-width: 800px) {
+    .contact__body { grid-template-columns: 1fr; }
+  }
+
+  /* --------------------------------------------------------------------
+     Footer
+     -------------------------------------------------------------------- */
+  .footer {
+    background: var(--black);
+    color: var(--gray-300);
+    padding: 56px 0 36px;
+    border-top: 1px solid #1c1c1c;
+  }
+  .footer__top {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr 1fr;
+    gap: 40px;
+    padding-bottom: 36px;
+    border-bottom: 1px solid #1c1c1c;
+  }
+  @media (max-width: 900px) {
+    .footer__top { grid-template-columns: 1fr 1fr; gap: 32px; }
+  }
+  @media (max-width: 560px) {
+    .footer__top { grid-template-columns: 1fr; gap: 28px; }
+  }
+  .footer__col-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gray-500);
+    margin-bottom: 14px;
+  }
+  .footer__col dl {
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    row-gap: 8px;
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: var(--gray-200);
+  }
+  .footer__col dt {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gray-500);
+  }
+  .footer__col dd {
+    margin: 0 0 6px 0;
+    color: var(--gray-100);
+  }
+  .footer__col a {
+    color: var(--gray-100);
+    text-decoration: none;
+    transition: color 0.2s var(--ease);
+  }
+  .footer__col a:hover { color: var(--white); }
+  .footer__brand-copy {
+    font-size: 12.5px;
+    line-height: 1.7;
+    color: var(--gray-300);
+    max-width: 340px;
+  }
+  .footer__bottom {
+    padding-top: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gray-500);
+  }
+  .footer__legal {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  /* --------------------------------------------------------------------
+     Reveal animations
+     -------------------------------------------------------------------- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Smaller utility adjustments */
+  @media (max-width: 540px) {
+    :root { --gutter-x: 22px; }
+    .nav__cta { padding: 8px 14px; font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ================== NAV ================== -->
+<nav class="nav is-dark" id="nav">
+  <div class="container nav__inner">
+    <a href="#top" class="logo" aria-label="S A W brandbuilder">
+      <img src="logo_dark.svg"  alt="S A W brandbuilder" class="logo__img logo__img--light" />
+      <img src="logo_light.svg" alt=""                    class="logo__img logo__img--dark" aria-hidden="true" />
+    </a>
+    <div class="nav__menu">
+      <a href="#philosophy" class="nav__link">Philosophy</a>
+      <a href="#values" class="nav__link">Values</a>
+      <a href="#services" class="nav__link">Services</a>
+      <a href="#portfolio" class="nav__link">Portfolio</a>
+    </div>
+    <a href="#contact" class="nav__cta">Contact</a>
+  </div>
+</nav>
+
+<!-- ================== HERO ================== -->
+<section class="hero" id="top">
+  <div class="container hero__main">
+    <div class="hero__eyebrow">
+      <span class="eyebrow">S A W</span>
+      <span class="eyebrow hero__eyebrow-sep">|</span>
+      <span class="eyebrow eyebrow--light">Brand Builder</span>
+    </div>
+    <h1 class="display hero__headline">
+      The New Standard,<br />
+      Engineered for Excellence.
+    </h1>
+    <p class="hero__kr-headline">
+      정교한 실행으로 완성하는 새로운 기준
+    </p>
+    <div class="hero__rule" aria-hidden="true"></div>
+    <div class="hero__subcopy">
+      <p class="hero__subcopy-en">
+        S A W is a Brand Builder that transforms brand ideas into refined product experiences.
+        By structuring and precisely managing every stage — from product planning to production —
+        we help brands execute with greater clarity and grow with confidence.
+      </p>
+      <p class="hero__subcopy-kr">
+        S A W는 브랜드의 아이디어를 정제된 제품 경험으로 구현하는 Brand Builder입니다.
+        제품 기획부터 생산까지의 전 과정을 구조화하고 정교하게 관리하여,
+        브랜드가 더 명확하게 실행하고 더 안정적으로 성장할 수 있도록 돕습니다.
+      </p>
+    </div>
+  </div>
+
+  <div class="container hero__bottom">
+    <span>Company Introduction</span>
+    <a href="#philosophy" class="hero__scroll">
+      Scroll
+      <svg width="10" height="14" viewBox="0 0 10 14" fill="none" aria-hidden="true">
+        <path d="M5 1v11M1 8l4 4 4-4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+  </div>
+</section>
+
+<!-- ================== PHILOSOPHY ================== -->
+<section class="section philosophy" id="philosophy">
+  <div class="container">
+    <div class="section__head reveal">
+      <span class="section__num">01 / Philosophy</span>
+      <h2 class="section__title display">
+        Great brands begin
+        <span>좋은 브랜드는 좋은 제품에서 시작됩니다.</span>
+      </h2>
+    </div>
+
+    <div class="philosophy__grid reveal">
+      <div class="philosophy__col philosophy__col--en">
+        <div class="eyebrow">— EN</div>
+        <p>Great brands begin with great products, and great products are completed through strong execution.</p>
+        <p>SAW connects vision and reality, planning and production, direction and execution — to transform brand ideas into refined product experiences.</p>
+        <p>We do more than make products. We build the standards and structure that help brands create with clarity and grow with confidence.</p>
+      </div>
+      <div class="philosophy__rule" aria-hidden="true"></div>
+      <div class="philosophy__col philosophy__col--kr">
+        <div class="eyebrow">— KR</div>
+        <p>좋은 브랜드는 좋은 제품에서 시작되고, 좋은 제품은 좋은 실행 구조에서 완성됩니다.</p>
+        <p>SAW는 브랜드의 아이디어를 정제된 제품 경험으로 구현하기 위해, 감각과 현실, 기획과 생산, 방향과 실행 사이를 정교하게 연결합니다.</p>
+        <p>우리는 단순히 제품을 만드는 것이 아니라, 브랜드가 더 명확하게 만들고 더 안정적으로 성장할 수 있는 기준과 구조를 함께 만듭니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== VALUES ================== -->
+<section class="section values" id="values">
+  <div class="container">
+    <div class="section__head reveal">
+      <span class="section__num">02 / Core Values</span>
+      <h2 class="section__title display">
+        Five Core Values
+        <span>다섯 가지 핵심 가치</span>
+      </h2>
+      <p class="section__lead">The principles that define how we create, build, and grow alongside our brand partners.</p>
+    </div>
+
+    <div class="values__grid reveal">
+      <div class="values__item">
+        <div class="values__num">01</div>
+        <div class="values__name-en">Refinement</div>
+        <div class="values__name-kr">정제</div>
+        <div class="values__tag">Distilling ideas into their purest form.</div>
+        <div class="values__desc">We eliminate the unnecessary to reveal the brand's core essence — translating complex concepts into high-purity product experiences.</div>
+      </div>
+      <div class="values__item">
+        <div class="values__num">02</div>
+        <div class="values__name-en">Architecture</div>
+        <div class="values__name-kr">구조화</div>
+        <div class="values__tag">Systemizing complexity into logical clarity.</div>
+        <div class="values__desc">We don't just make products — we build systems. Structured stages from concept to production turn ambiguity into a predictable journey.</div>
+      </div>
+      <div class="values__item">
+        <div class="values__num">03</div>
+        <div class="values__name-en">Precision</div>
+        <div class="values__name-kr">정교함</div>
+        <div class="values__tag">Uncompromising accuracy in every detail.</div>
+        <div class="values__desc">Excellence lives in the final millimeter. Meticulous management ensures the original intent is executed without loss or error.</div>
+      </div>
+      <div class="values__item">
+        <div class="values__num">04</div>
+        <div class="values__name-en">Depth</div>
+        <div class="values__name-kr">깊이</div>
+        <div class="values__tag">Rooting every creation in brand philosophy.</div>
+        <div class="values__desc">We look beyond surface-level trends. Deep understanding of core values ensures every product carries a story worth telling.</div>
+      </div>
+      <div class="values__item">
+        <div class="values__num">05</div>
+        <div class="values__name-en">Scalability</div>
+        <div class="values__name-kr">확장성</div>
+        <div class="values__tag">Engineering the foundation for sustainable growth.</div>
+        <div class="values__desc">We provide the blueprints for expansion — a new standard of production that lets brands scale with confidence across the market.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== SERVICES ================== -->
+<section class="section services" id="services">
+  <div class="container">
+    <div class="section__head reveal">
+      <span class="section__num">03 / What We Do</span>
+      <h2 class="section__title display">
+        Services
+        <span>서비스 영역</span>
+      </h2>
+      <p class="section__lead">Two integrated pillars that cover the full brand-to-product journey — from the first concept to long-term scale.</p>
+    </div>
+
+    <div class="services__pillars reveal">
+      <article class="pillar pillar--light">
+        <div class="pillar__num">01</div>
+        <h3 class="pillar__title">
+          Brand Building
+          <span>브랜드 빌딩 / 기획</span>
+        </h3>
+        <p class="pillar__desc">Concept development, product planning, and brand-aligned design direction — from philosophy to first sample.</p>
+        <ul class="pillar__list">
+          <li><span class="n">01</span><span class="en">Brand Positioning</span><span class="kr">포지셔닝</span></li>
+          <li><span class="n">02</span><span class="en">Product Planning</span><span class="kr">제품 기획</span></li>
+          <li><span class="n">03</span><span class="en">Design Direction</span><span class="kr">디자인 디렉션</span></li>
+          <li><span class="n">04</span><span class="en">Prototyping</span><span class="kr">샘플 개발</span></li>
+        </ul>
+      </article>
+
+      <article class="pillar pillar--dark">
+        <div class="pillar__num">02</div>
+        <h3 class="pillar__title">
+          Scaling &amp; Production
+          <span>양산 / 생산 파트너십</span>
+        </h3>
+        <p class="pillar__desc">A production OS that turns single samples into consistent, scalable output — with quality, timing, and cost engineered in.</p>
+        <ul class="pillar__list">
+          <li><span class="n">01</span><span class="en">Production Setup</span><span class="kr">양산 셋업</span></li>
+          <li><span class="n">02</span><span class="en">Quality Management</span><span class="kr">품질 관리</span></li>
+          <li><span class="n">03</span><span class="en">Supply Chain Ops</span><span class="kr">공급망 운영</span></li>
+          <li><span class="n">04</span><span class="en">Long-term Partnership</span><span class="kr">장기 파트너십</span></li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================== PROCESS ================== -->
+<section class="section process">
+  <div class="container">
+    <div class="section__head reveal">
+      <span class="section__num">04 / How We Work</span>
+      <h2 class="section__title display">
+        A five-stage journey
+        <span>프로세스 / 5단계</span>
+      </h2>
+    </div>
+
+    <div class="process__grid reveal">
+      <div class="process__step">
+        <div class="process__n">01</div>
+        <div class="process__name">Discovery<span>발견</span></div>
+        <div class="process__desc">Brand philosophy, category, and market context alignment.</div>
+      </div>
+      <div class="process__step">
+        <div class="process__n">02</div>
+        <div class="process__name">Definition<span>정의</span></div>
+        <div class="process__desc">Product strategy, positioning, and success metrics.</div>
+      </div>
+      <div class="process__step">
+        <div class="process__n">03</div>
+        <div class="process__name">Design<span>설계</span></div>
+        <div class="process__desc">Concept, material, pattern, and iterative sampling.</div>
+      </div>
+      <div class="process__step">
+        <div class="process__n">04</div>
+        <div class="process__name">Delivery<span>실행</span></div>
+        <div class="process__desc">Production setup, quality control, and launch.</div>
+      </div>
+      <div class="process__step">
+        <div class="process__n">05</div>
+        <div class="process__name">Scale<span>확장</span></div>
+        <div class="process__desc">Rollovers, capacity growth, and system evolution.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== PORTFOLIO ================== -->
+<section class="section portfolio" id="portfolio">
+  <div class="container">
+    <div class="section__head reveal">
+      <span class="section__num">05 / Portfolio</span>
+      <h2 class="section__title display">
+        Selected work
+        <span>주요 작업 사례</span>
+      </h2>
+    </div>
+
+    <div class="cards">
+      <a class="card card--light reveal" href="#contact" aria-label="TWELVE case">
+        <div class="card__image" style="background-image: url('assets/images/twelve.png');"></div>
+        <div class="card__overlay"></div>
+        <span class="card__index">CASE / 01</span>
+        <div class="card__logo">
+          <img src="assets/logos/twelve.svg" alt="TWELVE" />
+        </div>
+      </a>
+
+      <a class="card card--logo-lg reveal" href="#contact" aria-label="ANIDAR case">
+        <div class="card__image" style="background-image: url('assets/images/anidar.png');"></div>
+        <div class="card__overlay"></div>
+        <span class="card__index">CASE / 02</span>
+        <div class="card__logo">
+          <img src="assets/logos/anidar.svg" alt="ANIDAR" />
+        </div>
+      </a>
+
+      <a class="card reveal" href="#contact" aria-label="Brand C case">
+        <div class="card__image card__image--ph-c"></div>
+        <div class="card__overlay"></div>
+        <span class="card__index">CASE / 03</span>
+        <div class="card__logo">
+          <span class="card__logo-mark">Brand C</span>
+        </div>
+      </a>
+
+      <a class="card reveal" href="#contact" aria-label="Brand D case">
+        <div class="card__image card__image--ph-d"></div>
+        <div class="card__overlay"></div>
+        <span class="card__index">CASE / 04</span>
+        <div class="card__logo">
+          <span class="card__logo-mark">Brand D</span>
+        </div>
+      </a>
+
+      <a class="card reveal" href="#contact" aria-label="Brand E case">
+        <div class="card__image card__image--ph-e"></div>
+        <div class="card__overlay"></div>
+        <span class="card__index">CASE / 05</span>
+        <div class="card__logo">
+          <span class="card__logo-mark">Brand E</span>
+        </div>
+      </a>
+
+      <a class="card reveal" href="#contact" aria-label="Brand F case">
+        <div class="card__image card__image--ph-f"></div>
+        <div class="card__overlay"></div>
+        <span class="card__index">CASE / 06</span>
+        <div class="card__logo">
+          <span class="card__logo-mark">Brand F</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ================== CONTACT ================== -->
+<section class="contact" id="contact">
+  <div class="container">
+    <div class="reveal">
+      <div class="section__num" style="color: var(--gray-300); margin-bottom: 24px;">06 / Contact</div>
+      <h2 class="display contact__headline">
+        Ready to build a brand<br />
+        that grows with confidence?
+      </h2>
+      <p class="contact__kr">
+        정제된 제품 경험으로 브랜드의 기준을 만들어 갈 파트너를 기다립니다.
+      </p>
+    </div>
+
+    <div class="contact__body reveal">
+      <div class="contact__info">
+        <div class="contact__info-item">
+          <div class="eyebrow">Email</div>
+          <div class="contact__info-item-val"><a href="mailto:saw.danielyang@gmail.com">saw.danielyang@gmail.com</a></div>
+        </div>
+        <div class="contact__info-item">
+          <div class="eyebrow">Phone</div>
+          <div class="contact__info-item-val"><a href="tel:+821051240538">010-5124-0538</a></div>
+        </div>
+        <div class="contact__info-item">
+          <div class="eyebrow">Location</div>
+          <div class="contact__info-item-val">18-7, Nambusunhwan-ro 317-gil,<br/>Seocho-gu, Seoul, Republic of Korea</div>
+        </div>
+        <div class="contact__info-item">
+          <div class="eyebrow">Business Hours</div>
+          <div class="contact__info-item-val">Mon — Fri  /  10:00 — 19:00 KST</div>
+        </div>
+        <div class="contact__info-item">
+          <div class="eyebrow">Instagram</div>
+          <div class="contact__info-item-val"><a href="https://instagram.com/s_a_w_brandbuilder" target="_blank" rel="noopener">@s_a_w_brandbuilder</a></div>
+        </div>
+      </div>
+
+      <form class="contact__form" onsubmit="event.preventDefault(); handleSubmit(this);">
+        <div class="field">
+          <label for="name">Name  /  이름</label>
+          <input type="text" id="name" name="name" placeholder="Your name" required />
+        </div>
+        <div class="field">
+          <label for="company">Company  /  브랜드 · 회사</label>
+          <input type="text" id="company" name="company" placeholder="Brand or company name" />
+        </div>
+        <div class="field">
+          <label for="email">Email  /  이메일</label>
+          <input type="email" id="email" name="email" placeholder="you@brand.com" required />
+        </div>
+        <div class="field">
+          <label for="topic">Inquiry  /  문의 영역</label>
+          <select id="topic" name="topic">
+            <option value="brand-building">Brand Building / 기획</option>
+            <option value="scaling">Scaling &amp; Production / 양산</option>
+            <option value="both">Both / 전체 파트너십</option>
+            <option value="other">Other / 기타</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="message">Project Brief  /  프로젝트 개요</label>
+          <textarea id="message" name="message" placeholder="Tell us about your brand and what you're building." required></textarea>
+        </div>
+        <button type="submit" class="contact__submit">
+          Send inquiry
+          <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden="true">
+            <path d="M1 5h12M9 1l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ================== FOOTER ================== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__top">
+      <div class="footer__col">
+        <div class="footer__col-label">S A W Brandbuilder</div>
+        <p class="footer__brand-copy">
+          Transforming brand ideas into refined product experiences.<br/>
+          브랜드 아이디어를 정제된 제품 경험으로 구현합니다.
+        </p>
+      </div>
+
+      <div class="footer__col">
+        <div class="footer__col-label">Contact</div>
+        <dl>
+          <dt>E-mail</dt>
+          <dd><a href="mailto:saw.danielyang@gmail.com">saw.danielyang@gmail.com</a></dd>
+          <dt>Phone</dt>
+          <dd><a href="tel:+821051240538">010-5124-0538</a></dd>
+          <dt>Instagram</dt>
+          <dd><a href="https://instagram.com/s_a_w_brandbuilder" target="_blank" rel="noopener">@s_a_w_brandbuilder</a></dd>
+        </dl>
+      </div>
+
+      <div class="footer__col">
+        <div class="footer__col-label">Company</div>
+        <dl>
+          <dt>Address</dt>
+          <dd>18-7, Nambusunhwan-ro 317-gil,<br/>Seocho-gu, Seoul, Republic of Korea</dd>
+          <dt>사업자 등록번호</dt>
+          <dd>721-04-01706</dd>
+          <dt>통신판매업 신고번호</dt>
+          <dd>2020-서울서초-0579</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <div>© 2026  /  S A W  Brandbuilder. All rights reserved.</div>
+      <div class="footer__legal">
+        <span>Seoul, KR</span>
+        <span>Brand Builder / Production OS</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Nav scroll state
+  const nav = document.getElementById('nav');
+  const heroEl = document.querySelector('.hero');
+  const onScroll = () => {
+    const threshold = heroEl.offsetHeight - 80;
+    if (window.scrollY > threshold) {
+      nav.classList.add('is-scrolled');
+      nav.classList.remove('is-dark');
+    } else {
+      nav.classList.remove('is-scrolled');
+      nav.classList.add('is-dark');
+    }
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // Reveal on scroll
+  const revealEls = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.08 });
+    revealEls.forEach(el => io.observe(el));
+  } else {
+    revealEls.forEach(el => el.classList.add('is-visible'));
+  }
+
+  // Form submit placeholder
+  function handleSubmit(form) {
+    const btn = form.querySelector('.contact__submit');
+    const originalHtml = btn.innerHTML;
+    btn.innerHTML = 'Thank you  /  감사합니다';
+    btn.style.background = '#ffffff';
+    btn.style.color = '#0a0a0a';
+    setTimeout(() => {
+      btn.innerHTML = originalHtml;
+      btn.style.background = '';
+      btn.style.color = '';
+      form.reset();
+    }, 3200);
+  }
+</script>
+</body>
+</html>
