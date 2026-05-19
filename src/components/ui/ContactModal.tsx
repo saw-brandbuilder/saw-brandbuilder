@@ -42,7 +42,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
 
       // @ts-ignore
       const forminit = new window.Forminit();
-      const { data, redirectUrl, error } = await forminit.submit('f8o6b32oaof', formData);
+      const { error } = await forminit.submit('f8o6b32oaof', formData);
 
       if (error) {
         alert(error.message);
