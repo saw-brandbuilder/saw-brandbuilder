@@ -15,7 +15,7 @@ export default function Footer() {
             <div className="footer__col-label">Contact</div>
             <dl>
               <dt>E-mail</dt>
-              <dd><a href="mailto:saw.danielyang@gmail.com">saw.danielyang@gmail.com</a></dd>
+              <dd><a href="mailto:saw@saw-brandbuilder.com">saw@saw-brandbuilder.com</a></dd>
               <dt>Phone</dt>
               <dd><a href="tel:+821051240538">+82.10.5124.0538</a></dd>
               <dt>Instagram</dt>
